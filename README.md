@@ -3,7 +3,7 @@ Session Tab Overhaul
 
 A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoader) mod for [Resonite](https://resonite.com/) that overhauls the Session Tab of the Dash, most notably the Users list, by adding more (toggleable) details and options. 
 
-Original [Here](https://github.com/Banane9/NeosSessionTabOverhaul)
+## Original [Here](https://github.com/Banane9/NeosSessionTabOverhaul)
 
 Adds the following features to the Users list:
 * Alternating background colors for the rows
