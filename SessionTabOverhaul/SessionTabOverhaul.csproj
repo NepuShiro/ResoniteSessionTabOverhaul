@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.props" Condition="Exists('..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,6 +15,8 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
     <ProjectGuid>{0322B2EF-7452-479D-BAE2-FCAB75033337}</ProjectGuid>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,32 +37,72 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Publicize specific members in FrooxEngine.SessionUserController class -->
+    <!-- THIS WAS JUST DONE BECAUSE I WAS LAZY -->
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._cachedUserName" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._preMuteVolume" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._lastUserVolume" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._name" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._slider" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._mute" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._jump" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._respawn" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._silence" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._kick" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._ban" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController._lastIsPresent" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.TargetUser" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.CloudData" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.OnMute" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.OnJump" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.OnRespawn" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.OnSilence" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.OnKick" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.OnBan" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.InitializeSyncMembers" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.GetSyncMember" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.OpenUserProfile" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.AddBadge" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionUserController.SetCloudData" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionControlDialog.GenerateUi" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionControlDialog.OnAttach" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionControlDialog._accessLevelRadios" />
+    <Publicize Include="FrooxEngine:FrooxEngine.SessionPermissionController.OnCommonUpdate" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\0Harmony.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\MonkeyLoader\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="BaseX">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\BaseX.dll</HintPath>
+    <Reference Include="Elements.Core">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\Elements.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="CloudX.Shared">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\CloudX.Shared.dll</HintPath>
+    <Reference Include="SkyFrost.Base">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\SkyFrost.Base.dll</HintPath>
     </Reference>
-    <Reference Include="CodeX">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\CodeX.dll</HintPath>
+    <Reference Include="Elements.Assets">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\Elements.Assets.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FrooxEngine">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\Public\FrooxEngine.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\FrooxEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NeosModLoader">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\NeosVR\Libraries\NeosModLoader.dll</HintPath>
+    <Reference Include="ResoniteModLoader">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Libraries\ResoniteModLoader.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="SkyFrost.Base.Models">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\SkyFrost.Base.Models.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ValueTuple" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\System.ValueTuple.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SessionControlDialogPatches.cs" />
@@ -69,8 +112,19 @@
     <Compile Include="SessionTabOverhaul.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)\$(TargetFileName)" "C:\Program Files (x86)\Steam\steamapps\common\NeosVR\nml_mods\"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)\$(TargetFileName)" "C:\Program Files (x86)\Steam\steamapps\common\Resonite\rml_mods\"</PostBuildEvent>
   </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.props'))" />
+    <Error Condition="!Exists('..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets'))" />
+  </Target>
+  <Import Project="..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets" Condition="Exists('..\packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets')" />
 </Project>
