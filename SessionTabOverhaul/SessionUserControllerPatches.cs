@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Elements.Core;
 using SkyFrost.Base;
+using Renderite.Shared;
 
 namespace SessionTabOverhaul
 {
