@@ -48,10 +48,10 @@ namespace SessionTabOverhaul
         [AutoRegisterConfigKey]
         private static readonly ModConfigurationKey<bool> ShowVoiceModeKey = new("ShowVoiceMode", "Show the Voice mode in the Session Users list.", () => true);
 
-        public override string Author => "Banane9";
+        public override string Author => "Banane9, NepuShiro";
         public override string Link => "https://github.com/NepuShiro/ResoniteSessionTabOverhaul";
         public override string Name => "SessionTabOverhaul";
-        public override string Version => "2.0.0";
+        public override string Version => "2.1.1";
 
         internal static bool ColorHostName => Config.GetValue(ColorHostNameKey);
         internal static colorX FirstRowColor => Config.GetValue(FirstRowColorKey);
