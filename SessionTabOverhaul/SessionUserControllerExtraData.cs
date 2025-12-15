@@ -15,6 +15,8 @@ namespace SessionTabOverhaul
 
         public Text DeviceLabel { get; set; }
 
+        public Text DeviceLabelBackground { get; set; }
+
         public Text FPSOrQueuedMessagesLabel { get; set; }
 
         public Image RowBackgroundImage { get; set; }

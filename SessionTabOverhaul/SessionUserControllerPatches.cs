@@ -19,10 +19,13 @@ namespace SessionTabOverhaul
 		private const string screen = "screen";
 		private const string screenSprite = $"<sprite name=\"{screen}\">";
 
-		private const string vr = "vr";
-		private const string vrSprite = $"<sprite name=\"{vr}\">";
+	private const string vr = "vr";
+	private const string vrSprite = $"<sprite name=\"{vr}\">";
 
-		private const string muteSprite = $"<sprite name=\"{nameof(VoiceMode.Mute)}\">";
+	private const string linux = "linux";
+	private const string linuxSprite = $"<sprite name=\"{linux}\">";
+
+	private const string muteSprite = $"<sprite name=\"{nameof(VoiceMode.Mute)}\">";
 		private const string whisperSprite = $"<sprite name=\"{nameof(VoiceMode.Whisper)}\">";
 		private const string normalSprite = $"<sprite name=\"{nameof(VoiceMode.Normal)}\">";
 		private const string shoutSprite = $"<sprite name=\"{nameof(VoiceMode.Shout)}\">";
@@ -64,17 +67,75 @@ namespace SessionTabOverhaul
 				ui.NestOut();
 			}
 
-			if (SessionTabOverhaul.ShowDeviceLabel)
-			{
-				ui.Style.MinWidth = 1.5f * SessionUserController.HEIGHT;
-				ui.Style.MinHeight = 0.8f * SessionUserController.HEIGHT;
+		if (SessionTabOverhaul.ShowDeviceLabel)
+		{
+			ui.Style.MinWidth = 1.5f * SessionUserController.HEIGHT;
+			ui.Style.MinHeight = 0.8f * SessionUserController.HEIGHT;
 
-				ui.Panel();
-				extraData.DeviceLabel = ui.Text(GetUserDeviceLabel(user), alignment: Alignment.MiddleCenter);
-				extraData.DeviceLabel.Font.Target = badgeFont;
-				extraData.DeviceLabel.Color.Value = colorX.Red.SetValue(.7f);
-				ui.NestOut();
+			var devicePanel = ui.Panel();
+			
+		// Create layered badges for Linux users (Linux badge behind device badge)
+		if (user.Platform == Platform.Linux && SessionTabOverhaul.ShowLinuxLayeredBadge)
+		{
+			// Get sprite URIs
+			Uri linuxUri = OfficialAssets.Graphics.Badges.Linux;
+			Uri deviceUri = GetUserDeviceUri(user);
+			
+			if (linuxUri != null && deviceUri != null)
+			{
+				// Background layer: Linux badge (larger, behind, so Tux's head/feet show)
+				// Use Image component for better render order control - create FIRST so it renders behind
+				var bgSlot = devicePanel.Slot.AddSlot("TuxBackground");
+				var bgSpriteProvider = bgSlot.AttachSprite(linuxUri);
+				var bgImage = bgSlot.AttachComponent<Image>();
+				bgImage.Sprite.Target = bgSpriteProvider;
+				bgImage.Tint.Value = colorX.White.SetValue(.7f);
+				
+				// Position Tux centered in the panel, behind
+				var bgRectTransform = bgSlot.GetComponent<RectTransform>();
+				bgRectTransform.AnchorMin.Value = new float2(0.5f, 0.5f);
+				bgRectTransform.AnchorMax.Value = new float2(0.5f, 0.5f);
+				bgRectTransform.Pivot.Value = new float2(0.5f, 0.5f);
+				bgRectTransform.OffsetMin.Value = new float2(-20, -20);
+				bgRectTransform.OffsetMax.Value = new float2(20, 20);
+				
+				// Scale Tux larger so head and feet extend behind the device badge
+				bgSlot.LocalScale = new float3(2.5f, 2.5f, 1.0f);
+				
+				// Foreground layer: Device badge (normal size, centered on top)
+				// Use Image component - created AFTER Tux so it renders on top
+				var fgSlot = devicePanel.Slot.AddSlot("DeviceForeground");
+				var fgSpriteProvider = fgSlot.AttachSprite(deviceUri);
+				var fgImage = fgSlot.AttachComponent<Image>();
+				fgImage.Sprite.Target = fgSpriteProvider;
+				fgImage.Tint.Value = colorX.White.SetValue(1.0f);
+				
+				// Position device badge centered at the same position as Tux
+				var fgRectTransform = fgSlot.GetComponent<RectTransform>();
+				fgRectTransform.AnchorMin.Value = new float2(0.5f, 0.5f);
+				fgRectTransform.AnchorMax.Value = new float2(0.5f, 0.5f);
+				fgRectTransform.Pivot.Value = new float2(0.5f, 0.5f);
+				fgRectTransform.OffsetMin.Value = new float2(-12, -12);
+				fgRectTransform.OffsetMax.Value = new float2(12, 12);
 			}
+			else
+			{
+			// Fallback to Text if we can't get URIs
+			extraData.DeviceLabel = ui.Text(GetUserDeviceLabel(user), alignment: Alignment.MiddleCenter);
+			extraData.DeviceLabel.Font.Target = badgeFont;
+			extraData.DeviceLabel.Color.Value = colorX.White.SetValue(.7f);
+			}
+		}
+		else
+		{
+		// Non-Linux users or Linux users with layered badge disabled: single device badge
+		extraData.DeviceLabel = ui.Text(GetUserDeviceLabel(user), alignment: Alignment.MiddleCenter);
+		extraData.DeviceLabel.Font.Target = badgeFont;
+		extraData.DeviceLabel.Color.Value = colorX.White.SetValue(.7f);
+		}
+			
+			ui.NestOut();
+		}
 
 			ui.Style.MinWidth = -1;
 			ui.Style.FlexibleWidth = 1;
@@ -182,14 +243,8 @@ namespace SessionTabOverhaul
 			if (user.IsHost)
 				controller.AddBadge("host");
 
-			if (user.Platform.IsMobilePlatform())
-				controller.AddBadge("mobile");
-
-			if (user.Platform == Platform.Linux)
-				controller.AddBadge("linux");
-
-			if (user.HeadDevice == HeadOutputDevice.Headless)
-				controller.AddBadge("headless");
+		if (user.Platform.IsMobilePlatform())
+			controller.AddBadge("mobile");
 
 			if (user.UserID != null)
 			{
@@ -214,7 +269,7 @@ namespace SessionTabOverhaul
 			if (!controllerExtraData.TryGetValue(__instance, out var extraData) || extraData?.BadgesLabel == null)
 				return false;
 
-			if (SessionTabOverhaul.HidePatreonBadge && spriteName == "patreon")
+			if (SessionTabOverhaul.HidePatreonBadge && (spriteName == "patreon" || spriteName == "stripe" || spriteName == "supporter"))
 				return false;
 
 			var text = extraData.BadgesLabel.Content;
@@ -270,21 +325,51 @@ namespace SessionTabOverhaul
 			SessionTabOverhaul.SpritesInjected = true;
 		}
 
-		private static string GetUserDeviceLabel(FrooxEngine.User user)
-			=> (user.VR_Active && user.HeadDevice != HeadOutputDevice.Headless && !user.IsPresentInHeadset) ? $"<s>{GetUserDevice(user)}" : GetUserDevice(user);
+	private static string GetUserDeviceLabel(FrooxEngine.User user)
+	{
+		string device = GetUserDevice(user);
+		bool isStrikethrough = user.VR_Active && user.HeadDevice != HeadOutputDevice.Headless && !user.IsPresentInHeadset;
+		
+		if (isStrikethrough)
+			return $"<s>{device}";
+		
+		return device;
+	}
 
 		private static string GetUserDevice(FrooxEngine.User user)
-		{
-			if (user.HeadDevice == HeadOutputDevice.Headless)
-				return headlessSprite;
+	{
+		if (user.HeadDevice == HeadOutputDevice.Headless)
+			return headlessSprite;
 
-			if (user.VR_Active)
-				return vrSprite;
+		if (user.VR_Active)
+			return vrSprite;
 
-			return screenSprite;
-		}
+		return screenSprite;
+	}
 
-		private static VoiceMode GetUserVoiceMode(FrooxEngine.User user)
+	private static string GetUserDeviceSpriteName(FrooxEngine.User user)
+	{
+		if (user.HeadDevice == HeadOutputDevice.Headless)
+			return headless;
+
+		if (user.VR_Active)
+			return vr;
+
+		return screen;
+	}
+
+	private static Uri GetUserDeviceUri(FrooxEngine.User user)
+	{
+		if (user.HeadDevice == HeadOutputDevice.Headless)
+			return OfficialAssets.Graphics.Badges.Headless;
+
+		if (user.VR_Active)
+			return new Uri("resdb:///1d2dc53aa1b44d8a21aaaa3ce41b695ae724eb0553e7ee08d50fc0c7922ae149"); // vr sprite
+
+		return new Uri("resdb:///1c88a45653f60a9b29eefc5e3adc4659f3021a85debd5b4f3425ff29d4564794"); // screen sprite
+	}
+
+	private static VoiceMode GetUserVoiceMode(FrooxEngine.User user)
 			=> user.isMuted ? VoiceMode.Mute : user.VoiceMode;
 
 		private static string GetUserVoiceModeLabel(FrooxEngine.User user)
@@ -320,8 +405,11 @@ namespace SessionTabOverhaul
 			if (extraData.FPSOrQueuedMessagesLabel != null)
 				extraData.FPSOrQueuedMessagesLabel.Content.Value = GetUserFPSOrQueuedMessages(user);
 
-			if (extraData.DeviceLabel != null)
-				extraData.DeviceLabel.Content.Value = GetUserDeviceLabel(user);
+		if (extraData.DeviceLabel != null)
+			extraData.DeviceLabel.Content.Value = GetUserDeviceLabel(user);
+		
+		if (extraData.DeviceLabelBackground != null)
+			extraData.DeviceLabelBackground.Content.Value = linuxSprite;
 
 			__instance._slider.Target.BaseColor.Value = GetUserVoiceModeColor(user);
 

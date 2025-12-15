@@ -3,7 +3,7 @@
 		<RootNamespace>SessionTabOverhaul</RootNamespace>
 		<AssemblyName>SessionTabOverhaul</AssemblyName>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<FileAlignment>512</FileAlignment>
 		<LangVersion>10.0</LangVersion>
 		<Nullable>enable</Nullable>
@@ -17,6 +17,7 @@
 		<!-- If you don't want to provide a ResonitePath in dotnet build, you can specify one here -->
 		<ResonitePath>$(MSBuildThisFileDirectory)Resonite/</ResonitePath>
 		<ResonitePath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Resonite\')">C:\Program Files (x86)\Steam\steamapps\common\Resonite\</ResonitePath>
+    <ResonitePath Condition="Exists('$(HOME)/.local/share/Steam/steamapps/common/Resonite/')">$(HOME)/.local/share/Steam/steamapps/common/Resonite/</ResonitePath>
     <ResonitePath Condition="Exists('$(HOME)/.steam/steam/steamapps/common/Resonite/')">$(HOME)/.steam/steam/steamapps/common/Resonite/</ResonitePath>
     <ResonitePath Condition="Exists('P:\SteamLibrary\steamapps\common\Resonite\')">P:\SteamLibrary\steamapps\common\Resonite\</ResonitePath>
 	</PropertyGroup>
@@ -24,7 +25,7 @@
   <ItemGroup>
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3" PrivateAssets="all" />
     <Reference Include="0Harmony">
-      <HintPath>$(ResonitePath)MonkeyLoader\0Harmony.dll</HintPath>
+      <HintPath>$(ResonitePath)rml_libs\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Elements.Core" Publicize="true">

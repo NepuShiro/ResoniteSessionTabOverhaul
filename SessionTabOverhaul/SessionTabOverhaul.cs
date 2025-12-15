@@ -28,7 +28,10 @@ namespace SessionTabOverhaul
         private static readonly ModConfigurationKey<bool> HideCustomBadgesKey = new("HideCustomBadges", "Hide Custom Badges in the Session Users list.", () => false);
 
         [AutoRegisterConfigKey]
-        private static readonly ModConfigurationKey<bool> HidePatreonBadgeKey = new("HidePatreonBadge", "Hide the Patreon Badge in the Session Users list.", () => false);
+        private static readonly ModConfigurationKey<bool> HidePatreonBadgeKey = new("HidePatreonBadge", "Hide the Patreon and Stripe support badges in the Session Users list.", () => false);
+
+        [AutoRegisterConfigKey]
+        private static readonly ModConfigurationKey<bool> ShowLinuxLayeredBadgeKey = new("ShowLinuxLayeredBadge", "Show Linux badge layered behind device badge for Linux users. If disabled, only the device badge is shown.", () => true);
 
         [AutoRegisterConfigKey]
         private static readonly ModConfigurationKey<colorX> SecondRowColorKey = new("SecondRowColor", "Background color of the second row in the Session user lists.", () => new colorX(1, .15f));
@@ -64,6 +67,7 @@ namespace SessionTabOverhaul
         internal static bool ShowFPSOrQueuedMessages => Config.GetValue(ShowFPSOrQueuedMessagesKey);
         internal static bool ShowSteamButton => Config.GetValue(ShowSteamButtonKey);
         internal static bool ShowVoiceMode => Config.GetValue(ShowVoiceModeKey);
+        internal static bool ShowLinuxLayeredBadge => Config.GetValue(ShowLinuxLayeredBadgeKey);
         internal static bool SpritesInjected { get; set; } = false;
 
         public override void OnEngineInit()
