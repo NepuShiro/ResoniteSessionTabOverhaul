@@ -214,7 +214,7 @@ namespace SessionTabOverhaul
 			if (!controllerExtraData.TryGetValue(__instance, out var extraData) || extraData?.BadgesLabel == null)
 				return false;
 
-			if (SessionTabOverhaul.HidePatreonBadge && spriteName == "patreon")
+			if (SessionTabOverhaul.HidePatreonBadge && (spriteName == "patreon" || spriteName == "stripe" || spriteName == "supporter"))
 				return false;
 
 			var text = extraData.BadgesLabel.Content;
