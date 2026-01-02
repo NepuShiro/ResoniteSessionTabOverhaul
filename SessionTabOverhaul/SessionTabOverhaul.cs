@@ -68,7 +68,7 @@ namespace SessionTabOverhaul
 
         public override void OnEngineInit()
         {
-            Harmony harmony = new($"{Author}.{Name}");
+            Harmony harmony = new("net.NepuShiro.SessionTabOverhaul");
             Config = GetConfiguration();
             Config.Save(true);
             harmony.PatchAll();
